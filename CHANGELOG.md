@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/nanderspeerstra/portfolio-django/compare/0.4.0...0.5.0) (2026-05-07)
+
+
+### Features
+
+* **domain:** Updates website to new domain *.com ([f0d1c55](https://github.com/nanderspeerstra/portfolio-django/commit/f0d1c559583e4c122dc608f64e28871ced4f73bb))
+
 ## [0.4.0](https://github.com/nanderspeerstra/portfolio-django/compare/0.3.22...0.4.0) (2025-11-16)
 
 
