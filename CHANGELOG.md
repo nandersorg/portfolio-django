@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/nanderspeerstra/portfolio-django/compare/0.5.0...0.5.1) (2026-05-07)
+
+
+### Bug Fixes
+
+* **kubernetes:** Fixes issue where not all k8s yamls are applied ([13e354d](https://github.com/nanderspeerstra/portfolio-django/commit/13e354ddacc5bca0df25c34b2e1d7fcb57774697))
+
 ## [0.5.0](https://github.com/nanderspeerstra/portfolio-django/compare/0.4.0...0.5.0) (2026-05-07)
 
 
