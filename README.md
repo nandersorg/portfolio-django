@@ -160,5 +160,5 @@ This project is licensed under the MIT License.
 ## Author
 
 Made by Nander
-Portfolio: https://nanderspeerstra.me
+Portfolio: https://nanderspeerstra.com
 GitHub: https://github.com/nanderspeerstra
