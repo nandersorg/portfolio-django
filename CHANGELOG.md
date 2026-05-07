@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/nanderspeerstra/portfolio-django/compare/0.5.1...0.5.2) (2026-05-07)
+
+
+### Bug Fixes
+
+* **kubernetes:** secret.yaml not in repo, of course ([79b492a](https://github.com/nanderspeerstra/portfolio-django/commit/79b492a5557dfd0ab2fa5bee62c4caa8a727104e))
+
 ## [0.5.1](https://github.com/nanderspeerstra/portfolio-django/compare/0.5.0...0.5.1) (2026-05-07)
 
 
