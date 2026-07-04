@@ -3,6 +3,7 @@
 import pytest
 from django.test import Client
 from django.urls import reverse
+from unittest.mock import patch
 
 from tests.unit.gallery.factories import CategoryFactory, PhotoFactory
 
@@ -53,10 +54,100 @@ class TestGalleryViews:
 
     def test_hobbies_view(self):
         """Test the hobbies view."""
-        response = self.client.get(reverse("hobbies"))
+        dashboard = {
+            "available": True,
+            "message": "ok",
+            "today": {
+                "overall": {
+                    "label": "POSITIVE",
+                    "average_score": 0.4,
+                    "article_count": 5,
+                },
+                "categories": [
+                    {
+                        "category": "SPORT",
+                        "label": "POSITIVE",
+                        "average_score": 1.0,
+                        "article_count": 3,
+                    }
+                ],
+            },
+            "windows": {
+                "week": {
+                    "overall": {
+                        "label": "NEUTRAL",
+                        "average_score": 0.1,
+                        "article_count": 20,
+                    },
+                    "categories": [],
+                },
+                "month": {
+                    "overall": {
+                        "label": "NEUTRAL",
+                        "average_score": 0.0,
+                        "article_count": 60,
+                    },
+                    "categories": [],
+                },
+            },
+        }
+
+        with patch(
+            "gallery.views.get_sentiment_dashboard_data",
+            return_value=dashboard,
+        ):
+            response = self.client.get(reverse("hobbies"))
 
         assert response.status_code == 200
         assert "gallery/hobbies.html" in [t.name for t in response.templates]
+        assert (
+            response.context["sentiment_dashboard"]["today"]["overall"][
+                "label"
+            ]
+            == "POSITIVE"
+        )
+
+    def test_news_sentiment_api(self):
+        """Test the news sentiment JSON endpoint."""
+        dashboard = {
+            "available": True,
+            "message": "ok",
+            "today": {
+                "overall": {
+                    "label": "POSITIVE",
+                    "average_score": 0.5,
+                    "article_count": 4,
+                },
+                "categories": [],
+            },
+            "windows": {
+                "week": {
+                    "overall": {
+                        "label": "NEUTRAL",
+                        "average_score": 0.0,
+                        "article_count": 10,
+                    },
+                    "categories": [],
+                },
+                "month": {
+                    "overall": {
+                        "label": "NEUTRAL",
+                        "average_score": 0.0,
+                        "article_count": 40,
+                    },
+                    "categories": [],
+                },
+            },
+        }
+
+        with patch(
+            "gallery.views.get_sentiment_dashboard_data",
+            return_value=dashboard,
+        ):
+            response = self.client.get(reverse("news_sentiment_api"))
+
+        assert response.status_code == 200
+        assert response.json()["today"]["overall"]["label"] == "POSITIVE"
 
     def test_homepage_view(self):
         """Test the homepage view."""
