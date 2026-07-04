@@ -8,4 +8,4 @@ resources:
   - media-pvc.yaml
 images:
   - name: nspeerstra/portfolio-django
-    newTag: 0.5.2
+    newTag: 0.6.0

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/nandersorg/portfolio-django/compare/0.5.2...0.6.0) (2026-07-04)
+
+
+### Features
+
+* **hobbies:** Adds sentiment lab page, and updates ci and cd ([b5448fe](https://github.com/nandersorg/portfolio-django/commit/b5448fea1c25dc752e97ddd96042ea568f5d410a))
+
 ## [0.5.2](https://github.com/nanderspeerstra/portfolio-django/compare/0.5.1...0.5.2) (2026-05-07)
 
 
