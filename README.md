@@ -98,6 +98,18 @@ Create a `.env` file based on `.env.example`:
 DEBUG=True
 SECRET_KEY=your-secret-key
 ALLOWED_HOSTS=localhost,127.0.0.1
+ANALYTICS_DB_NAME=ml_platform
+ANALYTICS_DB_USER=portfolio
+ANALYTICS_DB_PASSWORD=your-dedicated-portfolio-reader-password
+ANALYTICS_DB_HOST=postgres.postgresql.svc.cluster.local
+ANALYTICS_DB_PORT=5432
+```
+
+For Kubernetes deployments, the `portfolio-secret` Secret should provide at least:
+
+```env
+SECRET_KEY=your-secret-key
+ANALYTICS_DB_PASSWORD=your-dedicated-portfolio-reader-password
 ```
 
 ---

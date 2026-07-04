@@ -98,6 +98,24 @@ DATABASES = {
     }
 }
 
+analytics_db_password = os.getenv("ANALYTICS_DB_PASSWORD") or os.getenv(
+    "PORTFOLIO_DB_PASSWORD"
+)
+
+if os.getenv("ANALYTICS_DB_NAME") and analytics_db_password:
+    DATABASES["analytics"] = {
+        "ENGINE": os.getenv(
+            "ANALYTICS_DB_ENGINE", "django.db.backends.postgresql"
+        ),
+        "NAME": os.getenv("ANALYTICS_DB_NAME"),
+        "USER": os.getenv("ANALYTICS_DB_USER", "portfolio"),
+        "PASSWORD": analytics_db_password,
+        "HOST": os.getenv(
+            "ANALYTICS_DB_HOST", "postgres.postgresql.svc.cluster.local"
+        ),
+        "PORT": os.getenv("ANALYTICS_DB_PORT", "5432"),
+    }
+
 # -------------------------------------------------------------------
 # Password validation
 # -------------------------------------------------------------------

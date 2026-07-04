@@ -5,32 +5,81 @@ on:
     tags:
       - '*.*.*'
 
+concurrency:
+  group: portfolio-production-deploy
+  cancel-in-progress: false
+
 jobs:
-  docker-retag:
+  promote-image:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      image-ref: ${{ steps.promote.outputs.image-ref }}
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
       - uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Retag & Push
+      - id: promote
+        name: Promote CI image to release
         run: |
-          RAW_TAG="${GITHUB_REF#refs/tags/}"
-          echo "Tagging version: $RAW_TAG"
+          SOURCE_TAG="sha-${GITHUB_SHA}"
+          RELEASE_TAG="${GITHUB_REF#refs/tags/}"
+          SOURCE_IMAGE="nspeerstra/portfolio-django:${SOURCE_TAG}"
+          RELEASE_IMAGE="nspeerstra/portfolio-django:${RELEASE_TAG}"
 
-          docker pull nspeerstra/portfolio-django:latest
-          docker tag nspeerstra/portfolio-django:latest nspeerstra/portfolio-django:${RAW_TAG}
-          docker push nspeerstra/portfolio-django:${RAW_TAG}
+          echo "Promoting $SOURCE_IMAGE to $RELEASE_IMAGE"
 
-  # --- Stage 5: Deploy to MicroK8s (Tag push only) ---
+          for attempt in 1 2 3 4 5 6; do
+            if docker pull "$SOURCE_IMAGE"; then
+              break
+            fi
+
+            if [[ "$attempt" == "6" ]]; then
+              echo "CI-built image $SOURCE_IMAGE was not available in DockerHub"
+              exit 1
+            fi
+
+            echo "Waiting for CI to publish $SOURCE_IMAGE"
+            sleep 30
+          done
+
+          IMAGE_REF=$(docker image inspect "$SOURCE_IMAGE" --format '{{index .RepoDigests 0}}')
+
+          docker tag "$SOURCE_IMAGE" "$RELEASE_IMAGE"
+          docker tag "$SOURCE_IMAGE" nspeerstra/portfolio-django:latest
+          docker push "$RELEASE_IMAGE"
+          docker push nspeerstra/portfolio-django:latest
+
+          echo "image-ref=$IMAGE_REF" >> "$GITHUB_OUTPUT"
+
   deploy:
     runs-on: self-hosted
-    needs: docker-retag
+    needs: promote-image
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy manifests with MicroK8s
+      - name: Verify manifest version matches release tag
         run: |
+          RAW_TAG="${GITHUB_REF#refs/tags/}"
+          MANIFEST_TAG=$(awk '/newTag:/ {print $2; exit}' kubernetes/kustomization.yaml)
+
+          echo "Release tag:   $RAW_TAG"
+          echo "Manifest tag:  $MANIFEST_TAG"
+
+          if [[ "$MANIFEST_TAG" != "$RAW_TAG" ]]; then
+            echo "kubernetes/kustomization.yaml does not match the release tag"
+            exit 1
+          fi
+      - name: Deploy exact release image with MicroK8s
+        run: |
+          IMAGE_REF="${{ needs.promote-image.outputs.image-ref }}"
+
+          echo "Deploying image: $IMAGE_REF"
+
           microk8s kubectl apply -k kubernetes/
+          microk8s kubectl set image deployment/portfolio portfolio="$IMAGE_REF" -n portfolio
+          microk8s kubectl rollout status deployment/portfolio -n portfolio --timeout=180s
+          microk8s kubectl get deployment portfolio -n portfolio -o jsonpath='{.spec.template.spec.containers[0].image}'

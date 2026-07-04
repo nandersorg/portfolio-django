@@ -1,5 +1,7 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from .models import Category, Photo
+from .sentiment import get_sentiment_dashboard_data
 
 
 def gallery_home(request):
@@ -18,7 +20,15 @@ def gallery_category(request, category_id):
 
 
 def hobbies(request):
-    return render(request, "gallery/hobbies.html")
+    return render(
+        request,
+        "gallery/hobbies.html",
+        {"sentiment_dashboard": get_sentiment_dashboard_data()},
+    )
+
+
+def news_sentiment_api(request):
+    return JsonResponse(get_sentiment_dashboard_data())
 
 
 def homepage(request):

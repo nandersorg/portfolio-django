@@ -83,6 +83,129 @@
 
     <hr class="my-5">
 
+    <h3 class="mb-4 text-center">News (NOS) Sentiment Lab</h3>
+
+    <div class="col-lg-10 mx-auto mb-5">
+      <p class="lead text-center mb-4">
+        I run a small Airflow pipeline that scrapes NOS headlines, classifies sentiment with Ollama,
+        and stores the results in PostgreSQL for this site to consume.
+      </p>
+      <p class="lead text-center mb-4">
+        The sentiment dashboard below shows the overall sentiment and category breakdown for today,
+        the last 7 days, and the last 30 days. It's a fun way to see how news sentiment fluctuates over time.
+      </p>
+      <p class="lead text-center mb-4">
+        The scores are normalized between -1 (very negative) and 1 (very positive), with 0 being neutral. The labels are derived from the average score: negative, neutral, or positive.
+      </p>
+
+      {% if sentiment_dashboard.available %}
+      <div class="row g-4 mb-4">
+        <div class="col-md-4">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <h4 class="h6 text-uppercase text-muted">Today overall</h4>
+              <p class="display-6 mb-1">{{ sentiment_dashboard.today.overall.label }}</p>
+              <p class="mb-1">Score: {{ sentiment_dashboard.today.overall.average_score }}</p>
+              <p class="text-muted mb-0">{{ sentiment_dashboard.today.overall.article_count }} articles</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <h4 class="h6 text-uppercase text-muted">7 day average</h4>
+              <p class="display-6 mb-1">{{ sentiment_dashboard.windows.week.overall.label }}</p>
+              <p class="mb-1">Score: {{ sentiment_dashboard.windows.week.overall.average_score }}</p>
+              <p class="text-muted mb-0">{{ sentiment_dashboard.windows.week.overall.article_count }} articles</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <h4 class="h6 text-uppercase text-muted">30 day average</h4>
+              <p class="display-6 mb-1">{{ sentiment_dashboard.windows.month.overall.label }}</p>
+              <p class="mb-1">Score: {{ sentiment_dashboard.windows.month.overall.average_score }}</p>
+              <p class="text-muted mb-0">{{ sentiment_dashboard.windows.month.overall.article_count }} articles</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <h4 class="h5">Today by category</h4>
+          <div class="row gx-2 px-3 mb-2 text-muted small fw-semibold text-uppercase">
+            <div class="col-5">Category</div>
+            <div class="col-3 text-end">Score</div>
+            <div class="col-4 text-end">Articles</div>
+          </div>
+          <ul class="list-group">
+            {% for category in sentiment_dashboard.today.categories %}
+            <li class="list-group-item">
+              <div class="row gx-2 align-items-center">
+                <div class="col-5">{{ category.category }}</div>
+                <div class="col-3 text-end">{{ category.average_score }}</div>
+                <div class="col-4 text-end">{{ category.article_count }}</div>
+              </div>
+            </li>
+            {% empty %}
+            <li class="list-group-item text-muted">No sentiment data yet for today.</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <h4 class="h5">7 day category average</h4>
+          <div class="row gx-2 px-3 mb-2 text-muted small fw-semibold text-uppercase">
+            <div class="col-5">Category</div>
+            <div class="col-3 text-end">Score</div>
+            <div class="col-4 text-end">Articles</div>
+          </div>
+          <ul class="list-group">
+            {% for category in sentiment_dashboard.windows.week.categories %}
+            <li class="list-group-item">
+              <div class="row gx-2 align-items-center">
+                <div class="col-5">{{ category.category }}</div>
+                <div class="col-3 text-end">{{ category.average_score }}</div>
+                <div class="col-4 text-end">{{ category.article_count }}</div>
+              </div>
+            </li>
+            {% empty %}
+            <li class="list-group-item text-muted">No seven-day data yet.</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <h4 class="h5">30 day category average</h4>
+          <div class="row gx-2 px-3 mb-2 text-muted small fw-semibold text-uppercase">
+            <div class="col-5">Category</div>
+            <div class="col-3 text-end">Score</div>
+            <div class="col-4 text-end">Articles</div>
+          </div>
+          <ul class="list-group">
+            {% for category in sentiment_dashboard.windows.month.categories %}
+            <li class="list-group-item">
+              <div class="row gx-2 align-items-center">
+                <div class="col-5">{{ category.category }}</div>
+                <div class="col-3 text-end">{{ category.average_score }}</div>
+                <div class="col-4 text-end">{{ category.article_count }}</div>
+              </div>
+            </li>
+            {% empty %}
+            <li class="list-group-item text-muted">No thirty-day data yet.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% else %}
+      <div class="alert alert-secondary mb-0" role="alert">
+        Sentiment dashboard is not available yet: {{ sentiment_dashboard.message }}
+      </div>
+      {% endif %}
+    </div>
+
+    <hr class="my-5">
+
     <h3 class="mb-4 text-center">This portfolio website: nanderspeerstra.com</h3>
 
     <div class="col-lg-10 mx-auto text-center">
@@ -90,36 +213,55 @@
             Automated pipeline from commit to live site — my garage for code, just with fewer oil stains.
         </p>
 
-        <div class="d-flex flex-wrap justify-content-center align-items-center gap-3 fs-5">
-            <a href="https://github.com/nanderspeerstra/portfolio-django" target="_blank" class="text-decoration-none">
-            🚀 GitHub
-            </a>
-            <i class="bi bi-arrow-right"></i>
-            <a href="https://github.com/googleapis/release-please" target="_blank" class="text-decoration-none">
-            🤖 Release Please
-            </a>
-            <i class="bi bi-arrow-right"></i>
-            <a href="https://github.com/marketplace/actions/automerge" target="_blank" class="text-decoration-none">
-            🔄 Automerge
-            </a>
-            <i class="bi bi-arrow-right"></i>
-            <a href="https://docs.github.com/en/actions" target="_blank" class="text-decoration-none">
-            🛠 GitHub Actions
-            </a>
-            <i class="bi bi-arrow-right"></i>
-            <a href="https://hub.docker.com/" target="_blank" class="text-decoration-none">
-            🐳 DockerHub
-            </a>
-            <i class="bi bi-arrow-right"></i>
-            <a href="https://microk8s.io/docs" target="_blank" class="text-decoration-none">
-            🖥 microk8s
-            </a>
-            <i class="bi bi-arrow-right"></i>
-            <a href="https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/" target="_blank" class="text-decoration-none">
-            🌐 Cloudflare Tunnel
-            </a>
-            <i class="bi bi-arrow-right"></i>
-            <span>✨ nanderspeerstra.com</span>
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-4">
+            <p class="text-muted text-uppercase small fw-semibold mb-3">Delivery flow</p>
+            <p class="mb-4 fs-5">
+              Code starts in
+              <a href="https://github.com/nanderspeerstra/portfolio-django" target="_blank" class="text-decoration-none">GitHub</a>,
+              moves through automated release and CI steps, is packaged in Docker, deployed on microk8s,
+              and served to the public through Cloudflare Tunnel.
+            </p>
+
+            <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 mb-4 fs-6">
+              <span class="badge text-bg-light border">🚀 GitHub</span>
+              <i class="bi bi-arrow-right text-muted"></i>
+              <span class="badge text-bg-light border">🤖 Release Please</span>
+              <i class="bi bi-arrow-right text-muted"></i>
+              <span class="badge text-bg-light border">🔄 Automerge</span>
+              <i class="bi bi-arrow-right text-muted"></i>
+              <span class="badge text-bg-light border">🛠 GitHub Actions</span>
+              <i class="bi bi-arrow-right text-muted"></i>
+              <span class="badge text-bg-light border">🐳 DockerHub</span>
+              <i class="bi bi-arrow-right text-muted"></i>
+              <span class="badge text-bg-light border">🖥 microk8s</span>
+              <i class="bi bi-arrow-right text-muted"></i>
+              <span class="badge text-bg-light border">🌐 Cloudflare Tunnel</span>
+              <i class="bi bi-arrow-right text-muted"></i>
+              <span class="badge text-bg-dark">✨ nanderspeerstra.com</span>
+            </div>
+
+            <div class="row g-3 text-start">
+              <div class="col-md-4">
+                <div class="h-100 rounded border p-3">
+                  <h4 class="h6 text-uppercase text-muted mb-2">Application</h4>
+                  <p class="mb-0">Django powers the site and renders the pages visitors see.</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="h-100 rounded border p-3">
+                  <h4 class="h6 text-uppercase text-muted mb-2">Data</h4>
+                  <p class="mb-0">PostgreSQL stores portfolio content and sentiment data for the dashboard.</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="h-100 rounded border p-3">
+                  <h4 class="h6 text-uppercase text-muted mb-2">Automation</h4>
+                  <p class="mb-0">Airflow keeps the news sentiment pipeline running in the background.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
     </div>
   </div>

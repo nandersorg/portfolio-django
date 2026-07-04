@@ -29,6 +29,11 @@ urlpatterns = [
     path("gallery", views.gallery_home, name="gallery_home"),
     path("hobbies", views.hobbies, name="hobbies"),
     path(
+        "api/news-sentiment/",
+        views.news_sentiment_api,
+        name="news_sentiment_api",
+    ),
+    path(
         "category/<int:category_id>/",
         views.gallery_category,
         name="gallery_category",
