@@ -1,11 +1,14 @@
 """Tests for gallery views."""
 
 import json
+import os
+
 import pytest
 from django.test import Client
 from django.urls import reverse
 from unittest.mock import MagicMock, patch
 
+import gallery.views
 from tests.unit.gallery.factories import CategoryFactory, PhotoFactory
 
 
@@ -184,6 +187,40 @@ class TestGalleryViews:
 
         assert response.status_code == 400
         assert "28x28" in response.json()["error"]
+
+    def test_quickdraw_predict_url_prefers_explicit_env(self):
+        """Test explicit QuickDraw endpoint configuration wins."""
+        with patch.dict(
+            os.environ,
+            {"QUICKDRAW_PREDICT_URL": "http://example.test/predict"},
+            clear=False,
+        ):
+            assert (
+                gallery.views.get_quickdraw_predict_url()
+                == "http://example.test/predict"
+            )
+
+    def test_quickdraw_predict_url_uses_cluster_dns_in_kubernetes(self):
+        """Test Kubernetes pods default to the cluster service DNS."""
+        with patch.dict(
+            os.environ,
+            {"KUBERNETES_SERVICE_HOST": "10.152.183.1"},
+            clear=True,
+        ):
+            assert gallery.views.get_quickdraw_predict_url() == (
+                "http://quickdraw-serving.ml-serving.svc.cluster.local:"
+                "8000/predict"
+            )
+
+    def test_quickdraw_predict_url_uses_local_nodeport_outside_kubernetes(
+        self,
+    ):
+        """Test local development defaults to the MicroK8s NodePort."""
+        with patch.dict(os.environ, {}, clear=True):
+            assert (
+                gallery.views.get_quickdraw_predict_url()
+                == "http://127.0.0.1:31548/predict"
+            )
 
     def test_homepage_view(self):
         """Test the homepage view."""
