@@ -9,17 +9,19 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from .models import Category, Photo
 from .sentiment import get_sentiment_dashboard_data
 
-QUICKDRAW_PREDICT_URL = os.getenv(
-    "QUICKDRAW_PREDICT_URL",
-    (
-        "http://127.0.0.1:31548/predict"
-        if os.getenv("DEBUG", "False") == "True"
-        else (
+
+def get_quickdraw_predict_url():
+    configured_url = os.getenv("QUICKDRAW_PREDICT_URL")
+    if configured_url:
+        return configured_url
+
+    if os.getenv("KUBERNETES_SERVICE_HOST"):
+        return (
             "http://quickdraw-serving.ml-serving.svc.cluster.local:"
             "8000/predict"
         )
-    ),
-)
+
+    return "http://127.0.0.1:31548/predict"
 
 
 def _is_valid_quickdraw_image(image):
@@ -38,7 +40,7 @@ def _is_valid_quickdraw_image(image):
 def _predict_quickdraw(image):
     payload = json.dumps({"image": image}).encode("utf-8")
     request = Request(
-        QUICKDRAW_PREDICT_URL,
+        get_quickdraw_predict_url(),
         data=payload,
         headers={"Content-Type": "application/json"},
         method="POST",
