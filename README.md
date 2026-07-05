@@ -8,6 +8,7 @@ A personal portfolio and image gallery built with Django. This site showcases yo
 
 - Personal portfolio homepage
 - Categorized image gallery (professional & personal)
+- Hobbies page with a browser-based QuickDraw demo backed by the ML platform
 - Admin interface for uploading and managing photos
 - Static assets organized with vendor libraries
 - Pre-commit hooks for code quality
@@ -103,6 +104,7 @@ ANALYTICS_DB_USER=portfolio
 ANALYTICS_DB_PASSWORD=your-dedicated-portfolio-reader-password
 ANALYTICS_DB_HOST=postgres.postgresql.svc.cluster.local
 ANALYTICS_DB_PORT=5432
+QUICKDRAW_PREDICT_URL=http://quickdraw-serving.ml-serving.svc.cluster.local:8000/predict
 ```
 
 For Kubernetes deployments, the `portfolio-secret` Secret should provide at least:
@@ -111,6 +113,10 @@ For Kubernetes deployments, the `portfolio-secret` Secret should provide at leas
 SECRET_KEY=your-secret-key
 ANALYTICS_DB_PASSWORD=your-dedicated-portfolio-reader-password
 ```
+
+When `DEBUG=True`, the app defaults to the local MicroK8s NodePort endpoint `http://127.0.0.1:31548/predict`.
+
+If the portfolio app runs outside the cluster and that NodePort is not available, point `QUICKDRAW_PREDICT_URL` at a reachable QuickDraw serving endpoint.
 
 ---
 

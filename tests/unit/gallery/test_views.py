@@ -1,9 +1,10 @@
 """Tests for gallery views."""
 
+import json
 import pytest
 from django.test import Client
 from django.urls import reverse
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from tests.unit.gallery.factories import CategoryFactory, PhotoFactory
 
@@ -106,6 +107,7 @@ class TestGalleryViews:
             ]
             == "POSITIVE"
         )
+        assert "csrftoken" in response.cookies
 
     def test_news_sentiment_api(self):
         """Test the news sentiment JSON endpoint."""
@@ -148,6 +150,40 @@ class TestGalleryViews:
 
         assert response.status_code == 200
         assert response.json()["today"]["overall"]["label"] == "POSITIVE"
+
+    def test_quickdraw_predict_api(self):
+        """Test the QuickDraw prediction proxy endpoint."""
+        mock_response = MagicMock()
+        mock_response.read.return_value = json.dumps(
+            {"prediction": "bicycle"}
+        ).encode("utf-8")
+        mock_context = MagicMock()
+        mock_context.__enter__.return_value = mock_response
+        mock_context.__exit__.return_value = False
+
+        with patch(
+            "gallery.views.urlopen", return_value=mock_context
+        ) as mock_urlopen:
+            response = self.client.post(
+                reverse("quickdraw_predict_api"),
+                data=json.dumps({"image": [[0] * 28 for _ in range(28)]}),
+                content_type="application/json",
+            )
+
+        assert response.status_code == 200
+        assert response.json()["prediction"] == "bicycle"
+        assert mock_urlopen.called
+
+    def test_quickdraw_predict_api_rejects_invalid_image(self):
+        """Test the QuickDraw endpoint rejects invalid payloads."""
+        response = self.client.post(
+            reverse("quickdraw_predict_api"),
+            data=json.dumps({"image": [[0] * 27 for _ in range(28)]}),
+            content_type="application/json",
+        )
+
+        assert response.status_code == 400
+        assert "28x28" in response.json()["error"]
 
     def test_homepage_view(self):
         """Test the homepage view."""
