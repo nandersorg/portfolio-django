@@ -3,6 +3,17 @@
 
 {% block title %}Hobbies — Nander Speerstra{% endblock title %}
 
+{% block extra_head %}
+<style>
+  .quickdraw-canvas {
+    touch-action: none;
+    background: #050505;
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+{% endblock extra_head %}
+
 {% block content %}
 <section class="section py-5">
   <div class="container" data-aos="fade-up">
@@ -203,6 +214,205 @@
       </div>
       {% endif %}
     </div>
+
+    <hr class="my-5">
+
+    <h3 class="mb-4 text-center">QuickDraw Playground</h3>
+
+    <div class="col-lg-10 mx-auto mb-5">
+      <div class="card shadow-sm border-0 overflow-hidden">
+        <div class="card-body p-4 p-lg-5">
+          <div class="row g-4 align-items-center">
+            <div class="col-lg-6">
+              <p class="lead mb-3">
+                Draw a simple sketch and send it to my QuickDraw classifier.
+                The current model knows three classes: bicycle, cat, and coffee cup.
+              </p>
+              <p class="text-muted mb-4">
+                The browser converts your drawing to a 28×28 grayscale matrix before it is posted
+                to the prediction service running in the ML platform.
+              </p>
+              <div class="d-flex flex-wrap gap-2 mb-3">
+                <button type="button" class="btn btn-dark" id="quickdraw-predict-button">Predict sketch</button>
+                <button type="button" class="btn btn-outline-secondary" id="quickdraw-clear-button">Clear canvas</button>
+              </div>
+              <div id="quickdraw-result" class="alert alert-secondary mb-0" role="status">
+                Draw something, then ask the model for a prediction.
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="rounded-4 border p-3 bg-light-subtle">
+                <canvas
+                  id="quickdraw-canvas"
+                  width="280"
+                  height="280"
+                  class="quickdraw-canvas d-block mx-auto rounded-4 border border-dark-subtle"
+                ></canvas>
+                <p class="text-muted text-center small mt-3 mb-0">
+                  White strokes on a dark background match the training data best.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (() => {
+        const drawCanvas = document.getElementById("quickdraw-canvas");
+        const predictButton = document.getElementById("quickdraw-predict-button");
+        const clearButton = document.getElementById("quickdraw-clear-button");
+        const resultElement = document.getElementById("quickdraw-result");
+
+        if (!drawCanvas || !predictButton || !clearButton || !resultElement) {
+          return;
+        }
+
+        const drawContext = drawCanvas.getContext("2d");
+        const sampleCanvas = document.createElement("canvas");
+        const sampleContext = sampleCanvas.getContext("2d");
+        let isDrawing = false;
+
+        sampleCanvas.width = 28;
+        sampleCanvas.height = 28;
+
+        function resetCanvas() {
+          drawContext.fillStyle = "#050505";
+          drawContext.fillRect(0, 0, drawCanvas.width, drawCanvas.height);
+          drawContext.lineCap = "round";
+          drawContext.lineJoin = "round";
+          drawContext.lineWidth = 18;
+          drawContext.strokeStyle = "#ffffff";
+        }
+
+        function updateResult(message, tone) {
+          resultElement.className = `alert mb-0 ${tone}`;
+          resultElement.textContent = message;
+        }
+
+        function getCanvasPoint(event) {
+          const rect = drawCanvas.getBoundingClientRect();
+          const scaleX = drawCanvas.width / rect.width;
+          const scaleY = drawCanvas.height / rect.height;
+
+          return {
+            x: (event.clientX - rect.left) * scaleX,
+            y: (event.clientY - rect.top) * scaleY,
+          };
+        }
+
+        function startDrawing(event) {
+          isDrawing = true;
+          const point = getCanvasPoint(event);
+          drawContext.beginPath();
+          drawContext.moveTo(point.x, point.y);
+        }
+
+        function draw(event) {
+          if (!isDrawing) {
+            return;
+          }
+
+          const point = getCanvasPoint(event);
+          drawContext.lineTo(point.x, point.y);
+          drawContext.stroke();
+        }
+
+        function stopDrawing() {
+          isDrawing = false;
+          drawContext.beginPath();
+        }
+
+        function getCookie(name) {
+          const cookieValue = document.cookie
+            .split(";")
+            .map((cookie) => cookie.trim())
+            .find((cookie) => cookie.startsWith(`${name}=`));
+
+          return cookieValue ? decodeURIComponent(cookieValue.split("=")[1]) : "";
+        }
+
+        function buildImageMatrix() {
+          sampleContext.fillStyle = "#050505";
+          sampleContext.fillRect(0, 0, sampleCanvas.width, sampleCanvas.height);
+          sampleContext.drawImage(drawCanvas, 0, 0, 28, 28);
+
+          const imageData = sampleContext.getImageData(0, 0, 28, 28).data;
+          const image = [];
+
+          for (let rowIndex = 0; rowIndex < 28; rowIndex += 1) {
+            const row = [];
+
+            for (let columnIndex = 0; columnIndex < 28; columnIndex += 1) {
+              const offset = (rowIndex * 28 + columnIndex) * 4;
+              row.push(
+                Math.round(
+                  (imageData[offset] + imageData[offset + 1] + imageData[offset + 2]) / 3
+                )
+              );
+            }
+
+            image.push(row);
+          }
+
+          return image;
+        }
+
+        async function predictSketch() {
+          predictButton.disabled = true;
+          updateResult("Asking the model for a prediction...", "alert-info");
+
+          try {
+            const response = await fetch("{{ quickdraw_predict_url }}", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken"),
+              },
+              body: JSON.stringify({ image: buildImageMatrix() }),
+            });
+
+            const responseText = await response.text();
+            const isJsonResponse = (response.headers.get("content-type") || "")
+              .includes("application/json");
+            const payload = isJsonResponse ? JSON.parse(responseText) : null;
+
+            if (!response.ok) {
+              throw new Error(
+                payload?.detail ||
+                payload?.error ||
+                responseText ||
+                "Prediction failed."
+              );
+            }
+
+            const label = payload.prediction.replaceAll("_", " ");
+            updateResult(`Prediction: ${label}`, "alert-success");
+          } catch (error) {
+            updateResult(error.message, "alert-danger");
+          } finally {
+            predictButton.disabled = false;
+          }
+        }
+
+        drawCanvas.addEventListener("pointerdown", startDrawing);
+        drawCanvas.addEventListener("pointermove", draw);
+        drawCanvas.addEventListener("pointerup", stopDrawing);
+        drawCanvas.addEventListener("pointerleave", stopDrawing);
+        drawCanvas.addEventListener("pointercancel", stopDrawing);
+        clearButton.addEventListener("click", () => {
+          resetCanvas();
+          updateResult(
+            "Draw something, then ask the model for a prediction.",
+            "alert-secondary"
+          );
+        });
+        predictButton.addEventListener("click", predictSketch);
+
+        resetCanvas();
+      })();
+    </script>
 
     <hr class="my-5">
 
