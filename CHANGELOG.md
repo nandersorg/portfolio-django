@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/nandersorg/portfolio-django/compare/0.7.0...0.7.1) (2026-07-05)
+
+
+### Bug Fixes
+
+* **hobbies:** Fixes prod issue that it got the wrong model url ([df3aa49](https://github.com/nandersorg/portfolio-django/commit/df3aa490c59333a141ae0ede83f35497003fe4f3))
+
 ## [0.7.0](https://github.com/nandersorg/portfolio-django/compare/0.6.0...0.7.0) (2026-07-05)
 
 
