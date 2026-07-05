@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/nandersorg/portfolio-django/compare/0.6.0...0.7.0) (2026-07-05)
+
+
+### Features
+
+* **hobbies:** Adds quickdraw playground to hobbies page ([e806af7](https://github.com/nandersorg/portfolio-django/commit/e806af7b3e91a1b6c1e99251cbddd7b1979d778d))
+
 ## [0.6.0](https://github.com/nandersorg/portfolio-django/compare/0.5.2...0.6.0) (2026-07-04)
 
 
