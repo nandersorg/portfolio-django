@@ -34,6 +34,11 @@ urlpatterns = [
         name="news_sentiment_api",
     ),
     path(
+        "api/quickdraw-predict/",
+        views.quickdraw_predict_api,
+        name="quickdraw_predict_api",
+    ),
+    path(
         "category/<int:category_id>/",
         views.gallery_category,
         name="gallery_category",
