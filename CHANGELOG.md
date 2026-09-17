@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/nandersorg/portfolio-django/compare/0.7.1...0.8.0) (2026-09-17)
+
+
+### Features
+
+* **design:** Portfolio redesign ([82c7f91](https://github.com/nandersorg/portfolio-django/commit/82c7f91be42ae72d99a2926c3632e0bd0e4df397))
+
 ## [0.7.1](https://github.com/nandersorg/portfolio-django/compare/0.7.0...0.7.1) (2026-07-05)
 
 
