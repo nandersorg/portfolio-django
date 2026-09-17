@@ -1,0 +1,152 @@
+{% extends "gallery/base.html" %}
+
+{% block title %}LLM & News Sentiment — Nander Speerstra{% endblock title %}
+
+{% block content %}
+<section class="section py-5">
+  <div class="container" data-aos="fade-up">
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'hobbies' %}">Hobbies</a></li>
+        <li class="breadcrumb-item active" aria-current="page">LLMs & news sentiment</li>
+      </ol>
+    </nav>
+
+    <div class="row g-4 align-items-center mb-5">
+      <div class="col-lg-7">
+        <p class="text-uppercase text-muted small fw-semibold mb-2">LLMs & language experiments</p>
+        <h1 class="display-5 fw-bold mb-3">Turning public news into a small analytics project.</h1>
+        <p class="lead mb-0">
+          I like experimenting with language models, data pipelines, and public signals. News sentiment is a fun way to combine pipeline work with curiosity about how the world is being framed.
+        </p>
+      </div>
+      <div class="col-lg-5">
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-4">
+            <h2 class="h5 text-uppercase text-muted mb-3">Pipeline flow</h2>
+            <div class="d-flex flex-column gap-2 small">
+              <span class="badge text-bg-light border w-fit">NOS articles</span>
+              <span class="text-center text-muted">↓</span>
+              <span class="badge text-bg-light border w-fit">Airflow</span>
+              <span class="text-center text-muted">↓</span>
+              <span class="badge text-bg-light border w-fit">Ollama classification</span>
+              <span class="text-center text-muted">↓</span>
+              <span class="badge text-bg-light border w-fit">PostgreSQL</span>
+              <span class="text-center text-muted">↓</span>
+              <span class="badge text-bg-dark w-fit">This portfolio</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if sentiment_dashboard.available %}
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="card shadow-sm h-100 border-0">
+          <div class="card-body">
+            <h3 class="h6 text-uppercase text-muted">Today overall</h3>
+            <p class="display-6 mb-1">{{ sentiment_dashboard.today.overall.label }}</p>
+            <p class="mb-1">Score: {{ sentiment_dashboard.today.overall.average_score }}</p>
+            <p class="text-muted mb-0">{{ sentiment_dashboard.today.overall.article_count }} articles</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm h-100 border-0">
+          <div class="card-body">
+            <h3 class="h6 text-uppercase text-muted">7 day average</h3>
+            <p class="display-6 mb-1">{{ sentiment_dashboard.windows.week.overall.label }}</p>
+            <p class="mb-1">Score: {{ sentiment_dashboard.windows.week.overall.average_score }}</p>
+            <p class="text-muted mb-0">{{ sentiment_dashboard.windows.week.overall.article_count }} articles</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm h-100 border-0">
+          <div class="card-body">
+            <h3 class="h6 text-uppercase text-muted">30 day average</h3>
+            <p class="display-6 mb-1">{{ sentiment_dashboard.windows.month.overall.label }}</p>
+            <p class="mb-1">Score: {{ sentiment_dashboard.windows.month.overall.average_score }}</p>
+            <p class="text-muted mb-0">{{ sentiment_dashboard.windows.month.overall.article_count }} articles</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-4">
+        <div class="card shadow-sm h-100 border-0">
+          <div class="card-body">
+            <h3 class="h5 mb-3">Today by category</h3>
+            <ul class="list-group list-group-flush">
+              {% for category in sentiment_dashboard.today.categories %}
+              <li class="list-group-item px-0">
+                <div class="d-flex justify-content-between gap-3">
+                  <span>{{ category.category }}</span>
+                  <span class="text-muted">{{ category.average_score }}</span>
+                </div>
+              </li>
+              {% empty %}
+              <li class="list-group-item px-0 text-muted">No data yet for today.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card shadow-sm h-100 border-0">
+          <div class="card-body">
+            <h3 class="h5 mb-3">7 day average</h3>
+            <ul class="list-group list-group-flush">
+              {% for category in sentiment_dashboard.windows.week.categories %}
+              <li class="list-group-item px-0">
+                <div class="d-flex justify-content-between gap-3">
+                  <span>{{ category.category }}</span>
+                  <span class="text-muted">{{ category.average_score }}</span>
+                </div>
+              </li>
+              {% empty %}
+              <li class="list-group-item px-0 text-muted">No weekly data yet.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card shadow-sm h-100 border-0">
+          <div class="card-body">
+            <h3 class="h5 mb-3">30 day average</h3>
+            <ul class="list-group list-group-flush">
+              {% for category in sentiment_dashboard.windows.month.categories %}
+              <li class="list-group-item px-0">
+                <div class="d-flex justify-content-between gap-3">
+                  <span>{{ category.category }}</span>
+                  <span class="text-muted">{{ category.average_score }}</span>
+                </div>
+              </li>
+              {% empty %}
+              <li class="list-group-item px-0 text-muted">No monthly data yet.</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="alert alert-secondary" role="alert">
+      Sentiment dashboard is currently unavailable: {{ sentiment_dashboard.message }}
+    </div>
+    {% endif %}
+
+    <div class="card shadow-sm border-0 mt-5">
+      <div class="card-body p-4">
+        <h2 class="h4 mb-3">Why I enjoy this</h2>
+        <p class="mb-0">
+          It sits right between technical infrastructure and everyday curiosity. I get to work with real data, build the ingestion flow, and then look at the output in a way that is still accessible and human.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

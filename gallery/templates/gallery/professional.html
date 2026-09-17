@@ -6,10 +6,13 @@
 {% block content %}
 <section class="section py-5">
   <div class="container" data-aos="fade-up">
-    <h2 class="mb-4 text-center">My Professional Journey</h2>
-    <p class="lead text-center mb-5">From linguistics to machine learning — here's how my career evolved.</p>
+    <div class="section-header text-center mb-5">
+      <span class="section-eyebrow">Professional profile</span>
+      <h2 class="mb-3">My Professional Journey</h2>
+      <p class="lead mb-0">From linguistics to machine learning — here's how my career evolved.</p>
+    </div>
 
-    <div class="row g-5">
+    <div class="story-panel row g-5 align-items-center">
       <div class="col-md-6">
         <h4>Academic Foundation</h4>
         <p>I began with a Bachelor's in General Linguistics at Radboud University Nijmegen (2010–2014), followed by a Master's in Communication & Information Sciences at Tilburg University (2014–2015). This interdisciplinary background shaped my approach to language, automation, and AI.</p>
@@ -21,85 +24,105 @@
         <p>Since 2022, I’ve focused on MLOps (AzureML), Python development, and DevOps. My work spans cloud automation, CI/CD, and scalable ML pipelines.</p>
       </div>
       <div class="col-md-6">
-        <img src="{% static 'img/photo/nander-work.jpg' %}" alt="Professional Journey" width="400" height="300" class="img-fluid rounded shadow">
+        <div class="image-card">
+          <img src="{% static 'img/photo/nander-work.jpg' %}" alt="Professional Journey" width="400" height="300" class="img-fluid rounded shadow">
+        </div>
       </div>
     </div>
 
-    <hr class="my-5">
+    <div class="divider my-5"></div>
 
-    <h3 class="mb-4 text-center">Technical Expertise</h3>
+    <div class="section-header text-center mb-4">
+      <span class="section-eyebrow">Capabilities</span>
+      <h3 class="mb-0">Technical Expertise</h3>
+    </div>
     <div class="row g-4 justify-content-center">
         <div class="col-md-2 col-6">
-            <div class="border rounded py-3 text-center shadow-sm">
+            <div class="skill-pill">
             <div class="fw-bold fs-5">Python</div>
             <div>Expert</div>
             </div>
         </div>
         <div class="col-md-2 col-6">
-            <div class="border rounded py-3 text-center shadow-sm">
+            <div class="skill-pill">
             <div class="fw-bold fs-5">Azure Cloud</div>
             <div>Advanced</div>
             </div>
         </div>
         <div class="col-md-2 col-6">
-            <div class="border rounded py-3 text-center shadow-sm">
+            <div class="skill-pill">
             <div class="fw-bold fs-5">Azure ML</div>
             <div>Advanced</div>
             </div>
         </div>
         <div class="col-md-2 col-6">
-            <div class="border rounded py-3 text-center shadow-sm">
+            <div class="skill-pill">
             <div class="fw-bold fs-5">CI/CD</div>
             <div>Advanced</div>
             </div>
         </div>
         <div class="col-md-2 col-6">
-            <div class="border rounded py-3 text-center shadow-sm">
+            <div class="skill-pill">
             <div class="fw-bold fs-5">Agile</div>
             <div>Intermediate</div>
             </div>
         </div>
         <div class="col-md-2 col-6">
-            <div class="border rounded py-3 text-center shadow-sm">
+            <div class="skill-pill">
             <div class="fw-bold fs-5">Docker</div>
             <div>Intermediate</div>
             </div>
         </div>
     </div>
 
-    <hr class="my-5">
+    <div class="divider my-5"></div>
 
-    <h3 class="mb-4 text-center">Core Strengths & Traits</h3>
+    <div class="section-header text-center mb-4">
+      <span class="section-eyebrow">Traits</span>
+      <h3 class="mb-0">Core Strengths & Traits</h3>
+    </div>
     <div class="row text-center g-4">
       <div class="col-md-4">
-        <i class="bi bi-journal-code display-5 text-primary mb-2"></i>
-        <h5>Continuous Learning</h5>
-        <p>Always exploring new tools, strategies, and trends to stay sharp and relevant.</p>
+        <div class="value-card">
+          <i class="bi bi-journal-code display-5 text-primary mb-2"></i>
+          <h5>Continuous Learning</h5>
+          <p>Always exploring new tools, strategies, and trends to stay sharp and relevant.</p>
+        </div>
       </div>
       <div class="col-md-4">
-        <i class="bi bi-check2-circle display-5 text-primary mb-2"></i>
-        <h5>Reliable & Consistent</h5>
-        <p>Delivering high-quality work with dependability and attention to detail.</p>
+        <div class="value-card">
+          <i class="bi bi-check2-circle display-5 text-primary mb-2"></i>
+          <h5>Reliable & Consistent</h5>
+          <p>Delivering high-quality work with dependability and attention to detail.</p>
+        </div>
       </div>
       <div class="col-md-4">
-        <i class="bi bi-people display-5 text-primary mb-2"></i>
-        <h5>Trust & Collaboration</h5>
-        <p>Fostering teamwork and supporting colleagues to build strong, innovative teams.</p>
+        <div class="value-card">
+          <i class="bi bi-people display-5 text-primary mb-2"></i>
+          <h5>Trust & Collaboration</h5>
+          <p>Fostering teamwork and supporting colleagues to build strong, innovative teams.</p>
+        </div>
       </div>
       <div class="col-md-4">
-        <i class="bi bi-search display-5 text-primary mb-2"></i>
-        <h5>Analytical & Meticulous</h5>
-        <p>Structured problem-solving with a focus on clarity, efficiency, and strategy.</p>
+        <div class="value-card">
+          <i class="bi bi-search display-5 text-primary mb-2"></i>
+          <h5>Analytical & Meticulous</h5>
+          <p>Structured problem-solving with a focus on clarity, efficiency, and strategy.</p>
+        </div>
       </div>
       <div class="col-md-4">
-        <i class="bi bi-chat-dots display-5 text-primary mb-2"></i>
-        <h5>Effective Communication</h5>
-        <p>Clear, concise, and collaborative — bridging technical and non-technical worlds.</p>
+        <div class="value-card">
+          <i class="bi bi-chat-dots display-5 text-primary mb-2"></i>
+          <h5>Effective Communication</h5>
+          <p>Clear, concise, and collaborative — bridging technical and non-technical worlds.</p>
+        </div>
       </div>
       <div class="col-md-4">
-        <i class="bi bi-lightbulb display-5 text-primary mb-2"></i>
-        <h5>Problem-Solving Mindset</h5>
-        <p>Proactive in identifying improvements and optimizing workflows.</p>
+        <div class="value-card">
+          <i class="bi bi-lightbulb display-5 text-primary mb-2"></i>
+          <h5>Problem-Solving Mindset</h5>
+          <p>Proactive in identifying improvements and optimizing workflows.</p>
+        </div>
       </div>
     </div>
   </div>
