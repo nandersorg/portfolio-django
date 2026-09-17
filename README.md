@@ -114,7 +114,9 @@ SECRET_KEY=your-secret-key
 ANALYTICS_DB_PASSWORD=your-dedicated-portfolio-reader-password
 ```
 
-When `DEBUG=True`, the app defaults to the local MicroK8s NodePort endpoint `http://127.0.0.1:31548/predict`.
+When the app runs inside Kubernetes, it defaults to the in-cluster service endpoint `http://quickdraw-serving.ml-serving.svc.cluster.local:8000/predict`.
+
+When the app runs outside Kubernetes, it defaults to the local MicroK8s NodePort endpoint `http://127.0.0.1:31548/predict`.
 
 If the portfolio app runs outside the cluster and that NodePort is not available, point `QUICKDRAW_PREDICT_URL` at a reachable QuickDraw serving endpoint.
 
