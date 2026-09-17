@@ -6,70 +6,83 @@
 {% block content %}
 <section class="section py-5">
   <div class="container" data-aos="fade-up">
-    <h2 class="mb-4 text-center">A Glimpse into My World</h2>
-    <p class="lead text-center mb-5">Technology, creativity, and curiosity drive everything I do.</p>
+    <div class="section-header text-center mb-5">
+      <span class="section-eyebrow">Personal life</span>
+      <h2 class="mb-3">A Glimpse into My World</h2>
+      <p class="lead mb-0">Technology, creativity, and curiosity drive everything I do.</p>
+    </div>
 
     <div class="row text-center g-4">
-      <!-- Row 1 -->
       <div class="col-md-4">
-        <i class="bi bi-house-heart display-5 text-primary mb-3"></i>
-        <h5>Home</h5>
-        <p>
-            Originally from Apeldoorn, I now call Ede home,
-            where I live with my wife and our two cats, Bilbo and Gilly.
-            Whether diving into machine learning projects,
-            exploring photography, or restoring a 1977 Classic Mini,
-            I always seek new challenges.
-        </p>
+        <div class="value-card h-100">
+          <i class="bi bi-house-heart display-5 text-primary mb-3"></i>
+          <h5>Home</h5>
+          <p>
+              Originally from Apeldoorn, I now call Ede home,
+              where I live with my wife and our two cats, Bilbo and Gilly.
+              Whether diving into machine learning projects,
+              exploring photography, or restoring a 1977 Classic Mini,
+              I always seek new challenges.
+          </p>
+        </div>
       </div>
       <div class="col-md-4">
-        <i class="bi bi-camera display-5 text-primary mb-3"></i>
-        <h5>Photography</h5>
-        <p>
-            Photography is my way of capturing the world from a unique perspective.
-            Whether it's landscapes, architecture, or our cats,
-            I like shots with a story behind it.
-            You can explore my work on the <a href="{% url 'personal' %}">Photography</a> page.
-        </p>
+        <div class="value-card h-100">
+          <i class="bi bi-camera display-5 text-primary mb-3"></i>
+          <h5>Photography</h5>
+          <p>
+              Photography is my way of capturing the world from a unique perspective.
+              Whether it's landscapes, architecture, or our cats,
+              I like shots with a story behind it.
+              You can explore my work on the <a href="{% url 'personal' %}">Photography</a> page.
+          </p>
+        </div>
       </div>
       <div class="col-md-4">
-        <i class="bi bi-tools display-5 text-primary mb-3"></i>
-        <h5>Tinkering</h5>
-        <p>
-            I find joy in hands-on work,
-            whether it's fixing motorbikes and our old Mini,
-            fiddling with my 3D printer, or experimenting with electronics
-            or computes.
-        </p>
+        <div class="value-card h-100">
+          <i class="bi bi-tools display-5 text-primary mb-3"></i>
+          <h5>Tinkering</h5>
+          <p>
+              I find joy in hands-on work,
+              whether it's fixing motorbikes and our old Mini,
+              fiddling with my 3D printer, or experimenting with electronics
+              or computes.
+          </p>
+        </div>
       </div>
 
-      <!-- Row 2 -->
       <div class="col-md-4">
-        <i class="bi bi-music-note-beamed display-5 text-primary mb-3"></i>
-        <h5>Music</h5>
-        <p>
-            Music is both an escape and an inspiration.
-            From playing the accordion and piano,
-            to appreciating HiRes audio and vinyl records,
-            I just can't be without.
-        </p>
+        <div class="value-card h-100">
+          <i class="bi bi-music-note-beamed display-5 text-primary mb-3"></i>
+          <h5>Music</h5>
+          <p>
+              Music is both an escape and an inspiration.
+              From playing the accordion and piano,
+              to appreciating HiRes audio and vinyl records,
+              I just can't be without.
+          </p>
+        </div>
       </div>
       <div class="col-md-4">
-        <i class="bi bi-lightbulb display-5 text-primary mb-3"></i>
-        <h5>Learning</h5>
-        <p>From exploring new technologies like Django (for this website)
-            or frameworks like ACT (or learning how to build a power amp),
-            to constantly expanding my horizons,
-            I believe in the power of lifelong learning.
-        </p>
+        <div class="value-card h-100">
+          <i class="bi bi-lightbulb display-5 text-primary mb-3"></i>
+          <h5>Learning</h5>
+          <p>From exploring new technologies like Django (for this website)
+              or frameworks like ACT (or learning how to build a power amp),
+              to constantly expanding my horizons,
+              I believe in the power of lifelong learning.
+          </p>
+        </div>
       </div>
       <div class="col-md-4">
-        <i class="bi bi-tree display-5 text-primary mb-3"></i>
-        <h5>Outdoors</h5>
-        <p>
-            Hiking, camping, and road trips — I recharge in nature
-            and love the open road.
-        </p>
+        <div class="value-card h-100">
+          <i class="bi bi-tree display-5 text-primary mb-3"></i>
+          <h5>Outdoors</h5>
+          <p>
+              Hiking, camping, and road trips — I recharge in nature
+              and love the open road.
+          </p>
+        </div>
       </div>
     </div>
   </div>

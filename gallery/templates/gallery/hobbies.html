@@ -3,476 +3,82 @@
 
 {% block title %}Hobbies — Nander Speerstra{% endblock title %}
 
-{% block extra_head %}
-<style>
-  .quickdraw-canvas {
-    touch-action: none;
-    background: #050505;
-    max-width: 100%;
-    height: auto;
-  }
-</style>
-{% endblock extra_head %}
-
 {% block content %}
 <section class="section py-5">
   <div class="container" data-aos="fade-up">
-    <h2 class="mb-4 text-center">My Hobbies</h2>
-    <p class="lead text-center mb-5">From vintage mechanics to modern DevOps — here’s what I enjoy building and maintaining.</p>
-
-    <hr class="my-5">
-
-    <h3 class="mb-4 text-center">Our Love for Red</h3>
-    <!-- Classic Machines -->
-    <div class="row g-5 align-items-center mb-5">
-      <div class="col-md-6">
-        <h3>1977 Classic Mini 1100 Special</h3>
-        <p>
-        Our love for the UK goes beyond whisky and rolling hills — it extends to Sir Alec Issigonis’
-        ingenious design of the Mini. What started as a clever solution to post‑war fuel shortages
-        became one of the most iconic small cars ever built. We’re fortunate to own a
-        1977 Classic Mini 1100 Special, a special Belgium edition.
-        </p>
-
-        <p>
-        When we first got the car, it had been neglected for years. Maintenance was patchy, it was colored
-        fifty shades of black/purple (even some parts with glitter), and the electrics were unreliable.
-        Since then, we’ve been steadily bringing it back to
-        life: repainting panels, fixing rust within our possibilities, fixing wiring gremlins,
-        replacing windows, and tackling countless
-        small jobs. Some repairs we handle ourselves — like the above and normal maintenance —
-        while bigger projects are entrusted to a local garage. It’s a balance of DIY
-        passion and professional support, each step making the car a little better than before.
-        </p>
-
-        <p>
-        The Mini has a personality that makes it impossible not
-        to smile, every time we open the garage door. Driving it is pure joy: the direct steering,
-        the mechanical feedback,
-        the sense of connection to the road.
-        </p>
-      </div>
-      <div class="col-md-6 text-center">
-        <img src="{% static 'img/photo/mini.jpg' %}" alt="1977 Classic Mini 1100 Special"
-             class="img-fluid rounded shadow" width="400" height="300">
-        <figcaption class="mt-2 text-muted">Our 1977 Mini 1100 Special.</figcaption>
-      </div>
-    </div>
-
-    <div class="row g-5 align-items-center mb-5">
-      <div class="col-md-6 order-md-2">
-        <h3>2004 Ducati ST3</h3>
-        <p>
-        The Ducati ST3 is a sport‑tourer that blends Italian character with practical long‑distance
-        ability. It has the unmistakable exotic quirks that Ducati is known for: a desmodromic
-        engine, revving up to 11,000 RPM, sharp handling, a very satisfying exhaute note...
-        And it doesn't like low revs, or speeds below 30 km/h. That's 'character' for you.
-        </p>
-
-        <p>
-        Much of the maintenance I handle myself: valve clearance checks, timing belts, fluid changes,
-        brake pads, and chain care. These jobs demand patience and a steep learning curve,
-        but they make the bike
-        feel more personal and rewarding. For safety checks and maintenance beyond my skills,
-        I rely on a trusted garage.
-        </p>
-
-        <p>
-        Every ride reminds me why I keep investing time in it. The sound of the engine, the way it
-        pulls through corners, and the confidence it inspires on longer trips all make the effort
-        worthwhile. It's only been in my pessession since the end of 2024, so I'm looking forward to
-        many more miles of adventures ahead.
-        </p>
-
-      </div>
-      <div class="col-md-6 order-md-1 text-center">
-        <img src="{% static 'img/photo/ducati.jpg' %}" alt="Ducati ST3"
-             class="img-fluid rounded shadow" width="400" height="300">
-        <figcaption class="mt-2 text-muted">My Ducati ST3 sport‑tourer.</figcaption>
-      </div>
-    </div>
-
-    <hr class="my-5">
-
-    <h3 class="mb-4 text-center">News (NOS) Sentiment Lab</h3>
-
-    <div class="col-lg-10 mx-auto mb-5">
-      <p class="lead text-center mb-4">
-        I run a small Airflow pipeline that scrapes NOS headlines, classifies sentiment with Ollama,
-        and stores the results in PostgreSQL for this site to consume.
+    <div class="text-center mb-5">
+      <p class="text-uppercase text-muted small fw-semibold mb-2">Interests</p>
+      <h1 class="display-5 fw-bold mb-3">My Hobbies</h1>
+      <p class="lead mx-auto hobbies-intro-copy">
+        A mix of mechanical work, language-model experiments, and ML engineering — each one reflects a different way I like to learn and build.
       </p>
-      <p class="lead text-center mb-4">
-        The sentiment dashboard below shows the overall sentiment and category breakdown for today,
-        the last 7 days, and the last 30 days. It's a fun way to see how news sentiment fluctuates over time.
-      </p>
-      <p class="lead text-center mb-4">
-        The scores are normalized between -1 (very negative) and 1 (very positive), with 0 being neutral. The labels are derived from the average score: negative, neutral, or positive.
-      </p>
-
-      {% if sentiment_dashboard.available %}
-      <div class="row g-4 mb-4">
-        <div class="col-md-4">
-          <div class="card shadow-sm h-100">
-            <div class="card-body">
-              <h4 class="h6 text-uppercase text-muted">Today overall</h4>
-              <p class="display-6 mb-1">{{ sentiment_dashboard.today.overall.label }}</p>
-              <p class="mb-1">Score: {{ sentiment_dashboard.today.overall.average_score }}</p>
-              <p class="text-muted mb-0">{{ sentiment_dashboard.today.overall.article_count }} articles</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card shadow-sm h-100">
-            <div class="card-body">
-              <h4 class="h6 text-uppercase text-muted">7 day average</h4>
-              <p class="display-6 mb-1">{{ sentiment_dashboard.windows.week.overall.label }}</p>
-              <p class="mb-1">Score: {{ sentiment_dashboard.windows.week.overall.average_score }}</p>
-              <p class="text-muted mb-0">{{ sentiment_dashboard.windows.week.overall.article_count }} articles</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card shadow-sm h-100">
-            <div class="card-body">
-              <h4 class="h6 text-uppercase text-muted">30 day average</h4>
-              <p class="display-6 mb-1">{{ sentiment_dashboard.windows.month.overall.label }}</p>
-              <p class="mb-1">Score: {{ sentiment_dashboard.windows.month.overall.average_score }}</p>
-              <p class="text-muted mb-0">{{ sentiment_dashboard.windows.month.overall.article_count }} articles</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row g-4">
-        <div class="col-lg-4">
-          <h4 class="h5">Today by category</h4>
-          <div class="row gx-2 px-3 mb-2 text-muted small fw-semibold text-uppercase">
-            <div class="col-5">Category</div>
-            <div class="col-3 text-end">Score</div>
-            <div class="col-4 text-end">Articles</div>
-          </div>
-          <ul class="list-group">
-            {% for category in sentiment_dashboard.today.categories %}
-            <li class="list-group-item">
-              <div class="row gx-2 align-items-center">
-                <div class="col-5">{{ category.category }}</div>
-                <div class="col-3 text-end">{{ category.average_score }}</div>
-                <div class="col-4 text-end">{{ category.article_count }}</div>
-              </div>
-            </li>
-            {% empty %}
-            <li class="list-group-item text-muted">No sentiment data yet for today.</li>
-            {% endfor %}
-          </ul>
-        </div>
-        <div class="col-lg-4">
-          <h4 class="h5">7 day category average</h4>
-          <div class="row gx-2 px-3 mb-2 text-muted small fw-semibold text-uppercase">
-            <div class="col-5">Category</div>
-            <div class="col-3 text-end">Score</div>
-            <div class="col-4 text-end">Articles</div>
-          </div>
-          <ul class="list-group">
-            {% for category in sentiment_dashboard.windows.week.categories %}
-            <li class="list-group-item">
-              <div class="row gx-2 align-items-center">
-                <div class="col-5">{{ category.category }}</div>
-                <div class="col-3 text-end">{{ category.average_score }}</div>
-                <div class="col-4 text-end">{{ category.article_count }}</div>
-              </div>
-            </li>
-            {% empty %}
-            <li class="list-group-item text-muted">No seven-day data yet.</li>
-            {% endfor %}
-          </ul>
-        </div>
-        <div class="col-lg-4">
-          <h4 class="h5">30 day category average</h4>
-          <div class="row gx-2 px-3 mb-2 text-muted small fw-semibold text-uppercase">
-            <div class="col-5">Category</div>
-            <div class="col-3 text-end">Score</div>
-            <div class="col-4 text-end">Articles</div>
-          </div>
-          <ul class="list-group">
-            {% for category in sentiment_dashboard.windows.month.categories %}
-            <li class="list-group-item">
-              <div class="row gx-2 align-items-center">
-                <div class="col-5">{{ category.category }}</div>
-                <div class="col-3 text-end">{{ category.average_score }}</div>
-                <div class="col-4 text-end">{{ category.article_count }}</div>
-              </div>
-            </li>
-            {% empty %}
-            <li class="list-group-item text-muted">No thirty-day data yet.</li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-      {% else %}
-      <div class="alert alert-secondary mb-0" role="alert">
-        Sentiment dashboard is not available yet: {{ sentiment_dashboard.message }}
-      </div>
-      {% endif %}
     </div>
 
-    <hr class="my-5">
-
-    <h3 class="mb-4 text-center">QuickDraw Playground</h3>
-
-    <div class="col-lg-10 mx-auto mb-5">
-      <div class="card shadow-sm border-0 overflow-hidden">
-        <div class="card-body p-4 p-lg-5">
-          <div class="row g-4 align-items-center">
-            <div class="col-lg-6">
-              <p class="lead mb-3">
-                Draw a simple sketch and send it to my QuickDraw classifier.
-                The current model knows three classes: bicycle, cat, and coffee cup.
-              </p>
-              <p class="text-muted mb-4">
-                The browser converts your drawing to a 28×28 grayscale matrix before it is posted
-                to the prediction service running in the ML platform.
-              </p>
-              <div class="d-flex flex-wrap gap-2 mb-3">
-                <button type="button" class="btn btn-dark" id="quickdraw-predict-button">Predict sketch</button>
-                <button type="button" class="btn btn-outline-secondary" id="quickdraw-clear-button">Clear canvas</button>
-              </div>
-              <div id="quickdraw-result" class="alert alert-secondary mb-0" role="status">
-                Draw something, then ask the model for a prediction.
-              </div>
-            </div>
-            <div class="col-lg-6">
-              <div class="rounded-4 border p-3 bg-light-subtle">
-                <canvas
-                  id="quickdraw-canvas"
-                  width="280"
-                  height="280"
-                  class="quickdraw-canvas d-block mx-auto rounded-4 border border-dark-subtle"
-                ></canvas>
-                <p class="text-muted text-center small mt-3 mb-0">
-                  White strokes on a dark background match the training data best.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <script>
-      (() => {
-        const drawCanvas = document.getElementById("quickdraw-canvas");
-        const predictButton = document.getElementById("quickdraw-predict-button");
-        const clearButton = document.getElementById("quickdraw-clear-button");
-        const resultElement = document.getElementById("quickdraw-result");
-
-        if (!drawCanvas || !predictButton || !clearButton || !resultElement) {
-          return;
-        }
-
-        const drawContext = drawCanvas.getContext("2d");
-        const sampleCanvas = document.createElement("canvas");
-        const sampleContext = sampleCanvas.getContext("2d");
-        let isDrawing = false;
-
-        sampleCanvas.width = 28;
-        sampleCanvas.height = 28;
-
-        function resetCanvas() {
-          drawContext.fillStyle = "#050505";
-          drawContext.fillRect(0, 0, drawCanvas.width, drawCanvas.height);
-          drawContext.lineCap = "round";
-          drawContext.lineJoin = "round";
-          drawContext.lineWidth = 18;
-          drawContext.strokeStyle = "#ffffff";
-        }
-
-        function updateResult(message, tone) {
-          resultElement.className = `alert mb-0 ${tone}`;
-          resultElement.textContent = message;
-        }
-
-        function getCanvasPoint(event) {
-          const rect = drawCanvas.getBoundingClientRect();
-          const scaleX = drawCanvas.width / rect.width;
-          const scaleY = drawCanvas.height / rect.height;
-
-          return {
-            x: (event.clientX - rect.left) * scaleX,
-            y: (event.clientY - rect.top) * scaleY,
-          };
-        }
-
-        function startDrawing(event) {
-          isDrawing = true;
-          const point = getCanvasPoint(event);
-          drawContext.beginPath();
-          drawContext.moveTo(point.x, point.y);
-        }
-
-        function draw(event) {
-          if (!isDrawing) {
-            return;
-          }
-
-          const point = getCanvasPoint(event);
-          drawContext.lineTo(point.x, point.y);
-          drawContext.stroke();
-        }
-
-        function stopDrawing() {
-          isDrawing = false;
-          drawContext.beginPath();
-        }
-
-        function getCookie(name) {
-          const cookieValue = document.cookie
-            .split(";")
-            .map((cookie) => cookie.trim())
-            .find((cookie) => cookie.startsWith(`${name}=`));
-
-          return cookieValue ? decodeURIComponent(cookieValue.split("=")[1]) : "";
-        }
-
-        function buildImageMatrix() {
-          sampleContext.fillStyle = "#050505";
-          sampleContext.fillRect(0, 0, sampleCanvas.width, sampleCanvas.height);
-          sampleContext.drawImage(drawCanvas, 0, 0, 28, 28);
-
-          const imageData = sampleContext.getImageData(0, 0, 28, 28).data;
-          const image = [];
-
-          for (let rowIndex = 0; rowIndex < 28; rowIndex += 1) {
-            const row = [];
-
-            for (let columnIndex = 0; columnIndex < 28; columnIndex += 1) {
-              const offset = (rowIndex * 28 + columnIndex) * 4;
-              row.push(
-                Math.round(
-                  (imageData[offset] + imageData[offset + 1] + imageData[offset + 2]) / 3
-                )
-              );
-            }
-
-            image.push(row);
-          }
-
-          return image;
-        }
-
-        async function predictSketch() {
-          predictButton.disabled = true;
-          updateResult("Asking the model for a prediction...", "alert-info");
-
-          try {
-            const response = await fetch("{{ quickdraw_predict_url }}", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": getCookie("csrftoken"),
-              },
-              body: JSON.stringify({ image: buildImageMatrix() }),
-            });
-
-            const responseText = await response.text();
-            const isJsonResponse = (response.headers.get("content-type") || "")
-              .includes("application/json");
-            const payload = isJsonResponse ? JSON.parse(responseText) : null;
-
-            if (!response.ok) {
-              throw new Error(
-                payload?.detail ||
-                payload?.error ||
-                responseText ||
-                "Prediction failed."
-              );
-            }
-
-            const label = payload.prediction.replaceAll("_", " ");
-            updateResult(`Prediction: ${label}`, "alert-success");
-          } catch (error) {
-            updateResult(error.message, "alert-danger");
-          } finally {
-            predictButton.disabled = false;
-          }
-        }
-
-        drawCanvas.addEventListener("pointerdown", startDrawing);
-        drawCanvas.addEventListener("pointermove", draw);
-        drawCanvas.addEventListener("pointerup", stopDrawing);
-        drawCanvas.addEventListener("pointerleave", stopDrawing);
-        drawCanvas.addEventListener("pointercancel", stopDrawing);
-        clearButton.addEventListener("click", () => {
-          resetCanvas();
-          updateResult(
-            "Draw something, then ask the model for a prediction.",
-            "alert-secondary"
-          );
-        });
-        predictButton.addEventListener("click", predictSketch);
-
-        resetCanvas();
-      })();
-    </script>
-
-    <hr class="my-5">
-
-    <h3 class="mb-4 text-center">This portfolio website: nanderspeerstra.com</h3>
-
-    <div class="col-lg-10 mx-auto text-center">
-        <p class="lead mb-4">
-            Automated pipeline from commit to live site — my garage for code, just with fewer oil stains.
-        </p>
-
-        <div class="card shadow-sm border-0">
-          <div class="card-body p-4">
-            <p class="text-muted text-uppercase small fw-semibold mb-3">Delivery flow</p>
-            <p class="mb-4 fs-5">
-              Code starts in
-              <a href="https://github.com/nanderspeerstra/portfolio-django" target="_blank" class="text-decoration-none">GitHub</a>,
-              moves through automated release and CI steps, is packaged in Docker, deployed on microk8s,
-              and served to the public through Cloudflare Tunnel.
+    <div class="row g-4 mb-5">
+      <div class="col-lg-4">
+        <div class="card h-100 shadow-sm border-0 overflow-hidden">
+          <div class="card-body p-4 d-flex flex-column h-100">
+            <p class="text-uppercase text-muted small fw-semibold mb-2">01</p>
+            <h2 class="h3 mb-3">Manual & hands-on</h2>
+            <p class="text-muted flex-grow-1">
+              Classic cars, motorcycles, maintenance, and the satisfaction of solving mechanical problems with patience and care.
             </p>
+            <a href="{% url 'hobbies_manual' %}" class="btn btn-dark mt-3">Explore manual hobbies</a>
+          </div>
+        </div>
+      </div>
 
-            <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 mb-4 fs-6">
-              <span class="badge text-bg-light border">🚀 GitHub</span>
-              <i class="bi bi-arrow-right text-muted"></i>
-              <span class="badge text-bg-light border">🤖 Release Please</span>
-              <i class="bi bi-arrow-right text-muted"></i>
-              <span class="badge text-bg-light border">🔄 Automerge</span>
-              <i class="bi bi-arrow-right text-muted"></i>
-              <span class="badge text-bg-light border">🛠 GitHub Actions</span>
-              <i class="bi bi-arrow-right text-muted"></i>
-              <span class="badge text-bg-light border">🐳 DockerHub</span>
-              <i class="bi bi-arrow-right text-muted"></i>
-              <span class="badge text-bg-light border">🖥 microk8s</span>
-              <i class="bi bi-arrow-right text-muted"></i>
-              <span class="badge text-bg-light border">🌐 Cloudflare Tunnel</span>
-              <i class="bi bi-arrow-right text-muted"></i>
-              <span class="badge text-bg-dark">✨ nanderspeerstra.com</span>
+      <div class="col-lg-4">
+        <div class="card h-100 shadow-sm border-0 overflow-hidden">
+          <div class="card-body p-4 d-flex flex-column h-100">
+            <p class="text-uppercase text-muted small fw-semibold mb-2">02</p>
+            <h2 class="h3 mb-3">LLMs & news sentiment</h2>
+            <p class="text-muted flex-grow-1">
+              Building small data pipelines around public stories, language models, and sentiment analysis to understand patterns in the news.
+            </p>
+            <a href="{% url 'hobbies_llm' %}" class="btn btn-dark mt-3">View LLM experiments</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card h-100 shadow-sm border-0 overflow-hidden">
+          <div class="card-body p-4 d-flex flex-column h-100">
+            <p class="text-uppercase text-muted small fw-semibold mb-2">03</p>
+            <h2 class="h3 mb-3">ML / MLOps</h2>
+            <p class="text-muted flex-grow-1">
+              Serving small model demos, learning deployment patterns, and exploring how ML systems work in production.
+            </p>
+            <a href="{% url 'hobbies_mlops' %}" class="btn btn-dark mt-3">Open ML playground</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4 p-lg-5">
+        <h2 class="h4 mb-3">A clearer way to think about it</h2>
+        <div class="row g-3 text-start">
+          <div class="col-md-4">
+            <div class="rounded border p-3 h-100">
+              <h3 class="h6 text-uppercase text-muted mb-2">Physical</h3>
+              <p class="mb-0">Repairing, maintaining, and learning from real machines.</p>
             </div>
-
-            <div class="row g-3 text-start">
-              <div class="col-md-4">
-                <div class="h-100 rounded border p-3">
-                  <h4 class="h6 text-uppercase text-muted mb-2">Application</h4>
-                  <p class="mb-0">Django powers the site and renders the pages visitors see.</p>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="h-100 rounded border p-3">
-                  <h4 class="h6 text-uppercase text-muted mb-2">Data</h4>
-                  <p class="mb-0">PostgreSQL stores portfolio content and sentiment data for the dashboard.</p>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="h-100 rounded border p-3">
-                  <h4 class="h6 text-uppercase text-muted mb-2">Automation</h4>
-                  <p class="mb-0">Airflow keeps the news sentiment pipeline running in the background.</p>
-                </div>
-              </div>
+          </div>
+          <div class="col-md-4">
+            <div class="rounded border p-3 h-100">
+              <h3 class="h6 text-uppercase text-muted mb-2">Analytical</h3>
+              <p class="mb-0">Turning public text into a feedback loop of classification and measurement.</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="rounded border p-3 h-100">
+              <h3 class="h6 text-uppercase text-muted mb-2">Building</h3>
+              <p class="mb-0">Creating small ML systems that are useful, testable, and operationally aware.</p>
             </div>
           </div>
         </div>
+      </div>
     </div>
   </div>
 </section>

@@ -28,6 +28,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("gallery", views.gallery_home, name="gallery_home"),
     path("hobbies", views.hobbies, name="hobbies"),
+    path("hobbies/manual", views.hobbies_manual, name="hobbies_manual"),
+    path("hobbies/llm", views.hobbies_llm, name="hobbies_llm"),
+    path("hobbies/mlops", views.hobbies_mlops, name="hobbies_mlops"),
     path(
         "api/news-sentiment/",
         views.news_sentiment_api,

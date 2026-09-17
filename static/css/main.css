@@ -64,12 +64,39 @@ body {
   color: var(--default-color);
   background-color: var(--background-color);
   font-family: var(--default-font);
+  background-image: radial-gradient(circle at top, rgba(19, 135, 193, 0.18), transparent 30%),
+    linear-gradient(180deg, #0d151a 0%, #101a20 100%);
 }
 
 a {
   color: var(--accent-color);
   text-decoration: none;
   transition: 0.3s;
+}
+
+.brand-mark {
+  display: flex;
+  align-items: center;
+}
+
+.brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--heading-color);
+  font-family: var(--nav-font);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.brand-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-color), #74d4ff);
+  box-shadow: 0 0 20px rgba(19, 135, 193, 0.8);
 }
 
 a:hover {
@@ -85,6 +112,23 @@ h5,
 h6 {
   color: var(--heading-color);
   font-family: var(--heading-font);
+}
+
+.hobbies-intro-copy {
+  max-width: 760px;
+}
+
+.quickdraw-canvas {
+  touch-action: none;
+  background: #050505;
+  max-width: 100%;
+  height: auto;
+}
+
+.hobby-hero-image {
+  max-height: 420px;
+  width: 100%;
+  object-fit: cover;
 }
 
 /* PHP Email Form Messages
@@ -145,7 +189,8 @@ h6 {
 .header {
   --background-color: rgba(255, 255, 255, 0);
   color: var(--default-color);
-  background-color: var(--background-color);
+  background-color: rgba(16, 26, 32, 0.78);
+  backdrop-filter: blur(18px);
   padding: 15px 0;
   transition: all 0.5s;
   z-index: 997;
@@ -174,14 +219,22 @@ h6 {
 
 .header .header-social-links a {
   color: color-mix(in srgb, var(--default-color), transparent 40%);
-  padding-left: 6px;
-  display: inline-block;
+  padding: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   transition: 0.3s;
   font-size: 16px;
 }
 
 .header .header-social-links a:hover {
   color: var(--default-color);
+  background: rgba(19, 135, 193, 0.18);
+  border-color: rgba(19, 135, 193, 0.45);
+  transform: translateY(-1px);
 }
 
 .header .header-social-links a i {
@@ -257,19 +310,23 @@ h6 {
     position: relative;
   }
 
-  .navmenu a i,
-  .navmenu a:focus i {
-    font-size: 12px;
-    line-height: 0;
-    margin-left: 5px;
-    transition: 0.3s;
-  }
-
-  .navmenu>ul>li>a:before {
+  .navmenu a::after {
     content: "";
     position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 100%;
     height: 2px;
-    bottom: -6px;
+    background: var(--accent-color);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.2s ease;
+  }
+
+  .navmenu a:hover::after,
+  .navmenu a.active::after {
+    transform: scaleX(1);
+  }
     left: 0;
     background-color: var(--nav-hover-color);
     visibility: hidden;
@@ -478,15 +535,30 @@ h6 {
 --------------------------------------------------------------*/
 .footer {
   color: var(--default-color);
-  background-color: var(--background-color);
+  background-color: rgba(5, 17, 23, 0.85);
   font-size: 14px;
-  padding: 40px 0;
+  padding: 32px 0;
   position: relative;
   border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
 }
 
 .footer .copyright p {
   margin-bottom: 0;
+}
+
+.footer-meta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: color-mix(in srgb, var(--default-color), transparent 20%);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.footer-separator {
+  color: var(--accent-color);
 }
 
 .footer .social-links {
@@ -708,10 +780,25 @@ section,
 # Hero Section
 --------------------------------------------------------------*/
 .hero {
-  padding: 80px 0;
-  min-height: 100vh;
+  padding: 76px 0 72px;
+  min-height: auto;
   display: flex;
   align-items: center;
+  position: relative;
+}
+
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(19, 135, 193, 0.5);
+  background: rgba(19, 135, 193, 0.09);
+  color: #a8daf5;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 1.15rem;
 }
 
 .hero .hero-content h1 {
@@ -764,14 +851,42 @@ section,
 .hero .hero-content p {
   font-size: 1.1rem;
   line-height: 1.6;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
   color: color-mix(in srgb, var(--default-color), transparent 30%);
 }
 
 .hero .hero-actions {
   display: flex;
   gap: 1rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
+}
+
+.hero-metrics {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.hero-metrics > div {
+  min-width: 150px;
+  padding: 0.8rem 1rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hero-metrics strong {
+  display: block;
+  font-size: 1.5rem;
+  color: var(--heading-color);
+  margin-bottom: 0.2rem;
+}
+
+.hero-metrics span {
+  display: block;
+  color: rgba(231, 242, 247, 0.72);
+  font-size: 0.8rem;
+  line-height: 1.5;
 }
 
 .hero .hero-actions .btn {
@@ -846,14 +961,35 @@ section,
 
 .hero .hero-image .image-wrapper {
   position: relative;
-  max-width: 450px;
+  max-width: 390px;
   margin: 0 auto;
+  padding: 1rem;
+  border-radius: 28px;
+  background: linear-gradient(135deg, rgba(19, 135, 193, 0.2), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.26);
 }
 
 .hero .hero-image .image-wrapper img {
   border-radius: 20px;
   box-shadow: 0 5px 15px color-mix(in srgb, var(--default-color), transparent 95%);
   transition: transform 0.3s ease;
+  display: block;
+}
+
+.image-badge {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 2;
+  padding: 0.5rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(15, 25, 31, 0.8);
+  border: 1px solid rgba(19, 135, 193, 0.5);
+  color: #bfe8ff;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .hero .hero-image .image-wrapper img:hover {
@@ -905,6 +1041,171 @@ section,
   animation-delay: 2s;
 }
 
+.surface-section {
+  padding-top: 24px;
+}
+
+.home-paths {
+  padding-bottom: 96px;
+}
+
+.home-paths-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  text-align: left;
+}
+
+.home-paths-header .section-eyebrow {
+  margin-bottom: 0.9rem;
+}
+
+.home-paths-header h2 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.home-paths-header p {
+  max-width: 330px;
+  margin: 0 0 0.25rem;
+  color: color-mix(in srgb, var(--default-color), transparent 25%);
+  line-height: 1.7;
+}
+
+.feature-card,
+.value-card,
+.story-panel,
+.skill-pill {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(20, 31, 38, 0.7);
+  border-radius: 22px;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.12);
+}
+
+.feature-card {
+  padding: 2rem 1.5rem;
+  height: 100%;
+}
+
+.path-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+
+.path-card:hover,
+.path-card:focus-visible {
+  color: inherit;
+  background: rgba(24, 42, 51, 0.9);
+  border-color: rgba(19, 135, 193, 0.65);
+  transform: translateY(-6px);
+}
+
+.path-label {
+  display: block;
+  margin-bottom: 0.75rem;
+  color: color-mix(in srgb, var(--default-color), transparent 42%);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.path-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 1.5rem;
+  color: var(--accent-color);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.path-link i {
+  transition: transform 0.3s ease;
+}
+
+.path-card:hover .path-link i,
+.path-card:focus-visible .path-link i {
+  transform: translate(3px, -3px);
+}
+
+.feature-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(19, 135, 193, 0.12);
+  border: 1px solid rgba(19, 135, 193, 0.4);
+  color: var(--accent-color);
+  font-size: 1.5rem;
+  margin-bottom: 1.1rem;
+}
+
+.feature-card h3,
+.value-card h5 {
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+}
+
+.feature-card p,
+.value-card p {
+  margin-bottom: 0;
+  color: color-mix(in srgb, var(--default-color), transparent 22%);
+  line-height: 1.7;
+}
+
+.story-panel {
+  padding: 2rem;
+}
+
+.story-panel h4 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.65rem;
+}
+
+.story-panel p {
+  color: color-mix(in srgb, var(--default-color), transparent 20%);
+  line-height: 1.8;
+  margin-bottom: 0.9rem;
+}
+
+.image-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 22px;
+  padding: 1rem;
+}
+
+.image-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+}
+
+.skill-pill {
+  text-align: center;
+  padding: 1rem 0.75rem;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.value-card {
+  padding: 1.75rem 1.25rem;
+  height: 100%;
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+}
+
 @media (max-width: 992px) {
   .hero .hero-image .floating-elements .floating-card {
     display: none;
@@ -927,6 +1228,12 @@ section,
   .hero .hero-content {
     text-align: center;
     margin-bottom: 3rem;
+  }
+
+  .home-paths-header {
+    align-items: start;
+    flex-direction: column;
+    gap: 0.75rem;
   }
 }
 

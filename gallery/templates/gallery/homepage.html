@@ -10,11 +10,26 @@
     <div class="row gy-4 align-items-center">
         <div class="col-lg-6 order-2 order-lg-1">
         <div class="hero-content">
+            <span class="section-eyebrow" data-aos="fade-up" data-aos-delay="150">Portfolio / MLOps / Photography</span>
             <h1 data-aos="fade-up" data-aos-delay="200">Hi, I'm <span class="highlight">Nander Speerstra</span></h1>
             <h2 data-aos="fade-up" data-aos-delay="300">MLOps Engineer, Developer, Photographer</h2>
             <p data-aos="fade-up" data-aos-delay="400">
-                I build scalable ML pipelines, explore creative software ideas, and capture the world through my lens.
+                I work with machine learning, Python, and cloud infrastructure. I also take photographs and build things in my spare time.
             </p>
+            <div class="hero-actions" data-aos="fade-up" data-aos-delay="500">
+                <a class="btn btn-primary" href="{% url 'professional' %}">Professional</a>
+                <a class="btn btn-outline" href="{% url 'gallery_home' %}">Gallery</a>
+            </div>
+            <div class="hero-metrics" data-aos="fade-up" data-aos-delay="550">
+                <div>
+                    <strong>ML</strong>
+                    <span>Python, Azure, and machine learning</span>
+                </div>
+                <div>
+                    <strong>Photo</strong>
+                    <span>Landscapes, architecture, and everyday life</span>
+                </div>
+            </div>
         </div>
         </div>
         <div class="col-lg-6 order-1 order-lg-2">
@@ -25,6 +40,47 @@
         </div>
         </div>
     </div>
+    </div>
+</section>
+
+<section class="section surface-section home-paths">
+    <div class="container">
+        <div class="section-header home-paths-header" data-aos="fade-up">
+            <div>
+            <span class="section-eyebrow">On this site</span>
+            <h2>Some things I work on</h2>
+            </div>
+            <p>Professional work, photography, and personal projects.</p>
+        </div>
+        <div class="row g-4 mt-2">
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                <a class="feature-card path-card" href="{% url 'professional' %}">
+                    <div class="feature-icon"><i class="bi bi-cpu"></i></div>
+                    <span class="path-label">01 / Professional</span>
+                    <h3>Machine learning systems</h3>
+                    <p>My work with MLOps, Python, Azure, and software development.</p>
+                    <span class="path-link">View profile <i class="bi bi-arrow-up-right"></i></span>
+                </a>
+            </div>
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                <a class="feature-card path-card" href="{% url 'gallery_home' %}">
+                    <div class="feature-icon"><i class="bi bi-code-slash"></i></div>
+                    <span class="path-label">02 / Photography</span>
+                    <h3>Photos and places</h3>
+                    <p>A collection of photographs of landscapes, architecture, and daily life.</p>
+                    <span class="path-link">View gallery <i class="bi bi-arrow-up-right"></i></span>
+                </a>
+            </div>
+            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                <a class="feature-card path-card" href="{% url 'hobbies' %}">
+                    <div class="feature-icon"><i class="bi bi-camera"></i></div>
+                    <span class="path-label">03 / Personal</span>
+                    <h3>Projects and hobbies</h3>
+                    <p>Some of the things I work on and learn about outside of my day job.</p>
+                    <span class="path-link">View hobbies <i class="bi bi-arrow-up-right"></i></span>
+                </a>
+            </div>
+        </div>
     </div>
 </section>
 {% endblock content %}

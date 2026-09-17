@@ -6,7 +6,7 @@ from collections import defaultdict
 from datetime import timedelta
 from typing import Any
 
-from django.db import connections
+from django.db import OperationalError, connections
 from django.utils import timezone
 
 SENTIMENT_SCORES = {
@@ -103,7 +103,7 @@ def get_sentiment_dashboard_data() -> dict[str, Any]:
                 }
                 for category, sentiment, scraped_at in cursor.fetchall()
             ]
-    except Exception as exc:
+    except (OperationalError, Exception) as exc:
         return {
             "available": False,
             "message": f"analytics database unavailable: {exc}",

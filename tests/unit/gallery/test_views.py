@@ -1,12 +1,13 @@
 """Tests for gallery views."""
 
 import json
+from unittest.mock import MagicMock, patch
 import os
 
 import pytest
+from django.db import OperationalError
 from django.test import Client
 from django.urls import reverse
-from unittest.mock import MagicMock, patch
 
 import gallery.views
 from tests.unit.gallery.factories import CategoryFactory, PhotoFactory
@@ -35,6 +36,17 @@ class TestGalleryViews:
 
         assert response.status_code == 200
         assert len(response.context["categories"]) == 0
+
+    def test_gallery_home_handles_missing_table(self):
+        """Test the gallery home view tolerates a missing database table."""
+        with patch(
+            "gallery.views.Category.objects.all",
+            side_effect=OperationalError("no such table: gallery_category"),
+        ):
+            response = self.client.get(reverse("gallery_home"))
+
+        assert response.status_code == 200
+        assert response.context["categories"] == []
 
     def test_gallery_category_view(self):
         """Test the gallery category view."""
@@ -111,6 +123,55 @@ class TestGalleryViews:
             == "POSITIVE"
         )
         assert "csrftoken" in response.cookies
+
+    def test_hobbies_subpages_render(self):
+        """Test the hobbies overview and interest subpages."""
+        dashboard = {
+            "available": True,
+            "message": "ok",
+            "today": {
+                "overall": {
+                    "label": "POSITIVE",
+                    "average_score": 0.3,
+                    "article_count": 3,
+                },
+                "categories": [],
+            },
+            "windows": {
+                "week": {
+                    "overall": {
+                        "label": "NEUTRAL",
+                        "average_score": 0.0,
+                        "article_count": 5,
+                    },
+                    "categories": [],
+                },
+                "month": {
+                    "overall": {
+                        "label": "NEUTRAL",
+                        "average_score": 0.0,
+                        "article_count": 15,
+                    },
+                    "categories": [],
+                },
+            },
+        }
+
+        with patch(
+            "gallery.views.get_sentiment_dashboard_data",
+            return_value=dashboard,
+        ):
+            overview = self.client.get(reverse("hobbies"))
+            manual = self.client.get(reverse("hobbies_manual"))
+            llm = self.client.get(reverse("hobbies_llm"))
+            mlops = self.client.get(reverse("hobbies_mlops"))
+
+        assert overview.status_code == 200
+        assert manual.status_code == 200
+        assert llm.status_code == 200
+        assert mlops.status_code == 200
+        assert "My Hobbies" in overview.content.decode("utf-8")
+        assert "Manual & hands-on" in overview.content.decode("utf-8")
 
     def test_news_sentiment_api(self):
         """Test the news sentiment JSON endpoint."""

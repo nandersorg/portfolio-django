@@ -3,6 +3,7 @@ import os
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
+from django.db import OperationalError
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -51,13 +52,20 @@ def _predict_quickdraw(image):
 
 
 def gallery_home(request):
-    categories = Category.objects.all()
+    try:
+        categories = Category.objects.all()
+    except OperationalError:
+        categories = []
     return render(request, "gallery/gallery.html", {"categories": categories})
 
 
 def gallery_category(request, category_id):
-    category = Category.objects.get(id=category_id)
-    photos = Photo.objects.filter(category=category)
+    try:
+        category = Category.objects.get(id=category_id)
+        photos = Photo.objects.filter(category=category)
+    except OperationalError:
+        category = None
+        photos = []
     return render(
         request,
         "gallery/gallery-category.html",
@@ -72,6 +80,33 @@ def hobbies(request):
         "gallery/hobbies.html",
         {
             "sentiment_dashboard": get_sentiment_dashboard_data(),
+            "quickdraw_predict_url": "/api/quickdraw-predict/",
+        },
+    )
+
+
+@ensure_csrf_cookie
+def hobbies_manual(request):
+    return render(request, "gallery/hobbies_manual.html")
+
+
+@ensure_csrf_cookie
+def hobbies_llm(request):
+    return render(
+        request,
+        "gallery/hobbies_llm.html",
+        {
+            "sentiment_dashboard": get_sentiment_dashboard_data(),
+        },
+    )
+
+
+@ensure_csrf_cookie
+def hobbies_mlops(request):
+    return render(
+        request,
+        "gallery/hobbies_mlops.html",
+        {
             "quickdraw_predict_url": "/api/quickdraw-predict/",
         },
     )
