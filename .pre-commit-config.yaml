@@ -20,33 +20,33 @@ repos:
 
   # Python linting (fast, modern)
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.5
+    rev: v0.17.6
     hooks:
       - id: ruff
 
   # Python formatting
   - repo: https://github.com/psf/black
-    rev: 25.11.0
+    rev: 26.10.1
     hooks:
       - id: black
         args: ['--line-length=79']
 
   # Python style checks
   - repo: https://github.com/PyCQA/flake8
-    rev: 7.3.0
+    rev: 7.5.0
     hooks:
       - id: flake8
 
   # Markdown linting (excluding legacy/generated files)
   - repo: https://github.com/jackdewinter/pymarkdown
-    rev: v0.9.33
+    rev: v0.9.42
     hooks:
       - id: pymarkdown
         exclude: 'src/data/|README\.md|CHANGELOG\.md|src/pages/'
 
   # Django template linting (optional but useful)
   - repo: https://github.com/Riverside-Healthcare/djlint
-    rev: v1.36.4
+    rev: v1.54.2
     hooks:
       - id: djlint
         args: ['--profile=django']

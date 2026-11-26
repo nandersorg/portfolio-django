@@ -7,6 +7,7 @@ from django.db import OperationalError
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import ensure_csrf_cookie
+
 from .models import Category, Photo
 from .sentiment import get_sentiment_dashboard_data
 
