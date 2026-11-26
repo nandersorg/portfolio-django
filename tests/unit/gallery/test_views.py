@@ -1,8 +1,8 @@
 """Tests for gallery views."""
 
 import json
-from unittest.mock import MagicMock, patch
 import os
+from unittest.mock import MagicMock, patch
 
 import pytest
 from django.db import OperationalError
@@ -10,6 +10,7 @@ from django.test import Client
 from django.urls import reverse
 
 import gallery.views
+from gallery.models import Category
 from tests.unit.gallery.factories import CategoryFactory, PhotoFactory
 
 
@@ -65,7 +66,7 @@ class TestGalleryViews:
 
     def test_gallery_category_not_found(self):
         """Test the gallery category view with invalid category ID."""
-        with pytest.raises(Exception):
+        with pytest.raises(Category.DoesNotExist):
             self.client.get(reverse("gallery_category", args=[999]))
 
     def test_hobbies_view(self):

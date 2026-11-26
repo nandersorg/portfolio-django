@@ -2,8 +2,9 @@
 Django settings for portfolio project.
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
+
 from dotenv import load_dotenv
 
 from .version import get_version
@@ -31,7 +32,9 @@ ALLOWED_HOSTS = [
 # Security
 # -------------------------------------------------------------------
 
-SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", 31536000))  # 1 year
+SECURE_HSTS_SECONDS = int(
+    os.getenv("SECURE_HSTS_SECONDS", "31536000")
+)  # 1 year
 SECURE_HSTS_INCLUDE_SUBDOMAINS = (
     os.getenv("SECURE_HSTS_INCLUDE_SUBDOMAINS", "True") == "True"
 )
@@ -122,16 +125,27 @@ if os.getenv("ANALYTICS_DB_NAME") and analytics_db_password:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"  # noqa: E501
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "UserAttributeSimilarityValidator"
+        )
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"  # noqa: E501
+        "NAME": (
+            "django.contrib.auth.password_validation." "MinimumLengthValidator"
+        )
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"  # noqa: E501
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "CommonPasswordValidator"
+        )
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"  # noqa: E501
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "NumericPasswordValidator"
+        )
     },
 ]
 

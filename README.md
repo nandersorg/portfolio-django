@@ -19,7 +19,7 @@ A personal portfolio and image gallery built with Django. This site showcases yo
 
 ## Tech Stack
 
-- Backend: Django 4.x
+- Backend: Django
 - Frontend: HTML, SCSS, JS (vanilla)
 - Database: SQLite (default, can be swapped)
 - CI/CD: GitHub Actions
